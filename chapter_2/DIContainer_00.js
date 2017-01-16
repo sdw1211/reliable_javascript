@@ -19,11 +19,23 @@ class DIContainer {
             }
         }
 
-        this.registrations[name] = {func: func};
+        this.registrations[name] = {dependencies: dependencies, func: func};
     }
 
     get(name) {
-        return this.registrations[name] && this.registrations[name].func();
+        const registration = this.registrations[name], dependencies = [];
+
+        if (registration === undefined) {
+            return undefined;
+        }
+
+        for(let dependcency of registration.dependencies) {
+            let dependcencyInRegistration = this.get(dependcency);
+
+            dependencies.push(dependcencyInRegistration ? dependcencyInRegistration  : undefined);
+        }
+
+        return registration.func.apply(undefined, dependencies);
     }
 }
 

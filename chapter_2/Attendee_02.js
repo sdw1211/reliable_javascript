@@ -15,3 +15,18 @@ Attendee.prototype.reserve = sessionId => {
         this.messenger.failure(`죄송합니다. 해당 좌석은 예약하실 수 없습니다.`);
     }
 };
+
+
+//일반 사용
+const Attendee = new Attendee(new Service, new Messenger, attendeeId);
+// DI 사용
+// DI 등록
+
+const OtawngLib = {};
+
+OtawngLib.Dicontainer = new Dicontainer;
+
+OtawngLib.Dicontainer.register('Servie', [], () => new Service);
+OtawngLib.Dicontainer.register('Messenger', [], () => new Messenger);
+OtawngLib.Dicontainer.register('AttendeeFactory', ['Service', 'Messenger'], (service, messenger) => attendeeId => new Attendee(service, messenger, Attendee));
+
