@@ -1,4 +1,4 @@
-const Conference = Conference || {};
+const Conference = {};
 Conference.attendee = (firstName, lastName) => {
     let checkedIn = false, first = firstName || 'none', last = lastName || 'none';
 
@@ -17,7 +17,7 @@ Conference.attendeeCollection = () => {
 
     return {
         contains: attendee => attendees.includes(attendee)
-        , add: attendee => {
+        , add: function(attendee) {
             if (!this.contains(attendee)) {
                 attendees.push(attendee);
             }
@@ -28,9 +28,27 @@ Conference.attendeeCollection = () => {
                 attendees.splice(searchIndex, 1);
             }
         }, iterate: callback => {
+            attendees.forEach(callback);
+        }
+    };
+};
+
+Conference.checkInRecorder = () => {
+    return {
+        recordCheckIn: attendee => {
 
         }
     };
 };
+
+Conference.checkInService = checkInRecorder => {
+    return {
+        checkIn: attendee => {
+            attendee.checkedIn();
+            checkInRecorder.recordCheckIn(attendee);
+        }
+    }
+};
+
 
 module.exports = Conference;
